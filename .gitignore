@@ -1,0 +1,47 @@
+# Dependencias de Node.js (comunes a back y front)
+node_modules/
+front/node_modules/
+back/node_modules/
+npm-debug.log
+yarn-error.log
+
+# Compiled output (específico de Angular en front)
+front/dist/
+front/tmp/
+front/out-tsc/
+front/bazel-out/
+
+# Archivos de entorno (específico de back)
+back/.env
+
+# IDEs y editores
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Miscellaneous (general y específico de Angular)
+front/.angular/cache
+.sass-cache/
+front/connect.lock
+front/coverage/
+front/libpeerconnection.log
+front/testem.log
+front/typings/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs y temporales generales
+*.log
+*.cache

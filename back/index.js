@@ -1,15 +1,16 @@
 const express = require('express');
 const sequelize = require('./config/db');
+const facturaRoutes = require('./routes/facturaRoutes');
+const cors = require('cors'); // Agregamos cors
 
 const app = express();
 
+app.use(cors({
+  origin: 'http://localhost:4200'
+})); // Habilitamos cors para nuestro front
 app.use(express.json());
+app.use('/api', facturaRoutes);
 
-app.get('/', (req, res) => {
-  res.send('¡Backend funcionando!');
-});
-
-// Función para iniciar el servidor solo si la DB está conectada
 const startServer = async () => {
   try {
     await sequelize.authenticate();
@@ -19,7 +20,7 @@ const startServer = async () => {
     });
   } catch (err) {
     console.error('Error en la conexión:', err);
-    process.exit(1); // Termina el proceso si la conexión falla
+    process.exit(1);
   }
 };
 

@@ -9,9 +9,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { VencimientosComponent } from './vencimientos/vencimientos.component';
+import { NuevaFacturaComponent } from './nueva-factura/nueva-factura.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, VencimientosComponent, NuevaFacturaComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -21,7 +25,9 @@ import { AppComponent } from './app.component';
     MatTableModule,         // Tabla de Material
     MatButtonModule,        // Botones de Material
     MatFormFieldModule,     // Campos de formulario
-    MatInputModule          // Inputs de Material
+    MatInputModule,
+    MatMenuModule,
+    MatToolbarModule         // Inputs de Material
   ],
   providers: [],
   bootstrap: [AppComponent]

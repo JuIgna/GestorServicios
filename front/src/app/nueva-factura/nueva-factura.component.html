@@ -1,0 +1,28 @@
+<h2>Agregar Factura</h2>
+<div class="form-container">
+  <mat-form-field>
+    <mat-label>Código Factura</mat-label>
+    <input matInput [(ngModel)]="nuevaFactura.cod_factura">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Código Propiedad</mat-label>
+    <input matInput [(ngModel)]="nuevaFactura.cod_propiedad">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Nro Empresa</mat-label>
+    <input matInput type="number" [(ngModel)]="nuevaFactura.nro_empresa">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Código Servicio</mat-label>
+    <input matInput [(ngModel)]="nuevaFactura.cod_servicio">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Importe</mat-label>
+    <input matInput type="number" [(ngModel)]="nuevaFactura.importe">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Fecha Vencimiento</mat-label>
+    <input matInput type="date" [(ngModel)]="nuevaFactura.fecha_venc">
+  </mat-form-field>
+  <button mat-raised-button color="accent" (click)="agregarFactura()">Agregar</button>
+</div>

@@ -4,35 +4,15 @@ create database GestorServicios
 use GestorServicios
 
 
-create table Tipos_DNI 
-(
-	cod_dni varchar(20) not null,
-	desc_tipo_dni varchar(45) not null,
-
-	constraint PK__Tipos_DNI primary key (cod_dni)
-)
-go
-
 create table Dueños
 (
-	dni varchar(30) not null,
-	cod_dni varchar(20) not null,
+	cuit varchar(50) not null,
 
 	nombre varchar(30) not null,
 	apellido varchar(30) not null,
 	fecha_nac date not null,
 
-	constraint PK__Dueños primary key (dni,cod_dni),
-	constraint FK__Dueños__Tipos_DNI foreign key (cod_dni) references Tipos_DNI
-)
-go
-
-create table Plantas
-(
-	nro_planta varchar(20) not null,
-	nom_planta varchar(20) not null,
-
-	constraint PK__Plantas primary key (nro_planta)
+	constraint PK__Dueños primary key (cuit)
 )
 go
 
@@ -70,22 +50,18 @@ go
 
 create table Propiedades
 (
-	cod_propiedad varchar(40) not null,
+	nro_propiedad int not null identity, 
 	nombre varchar(50) not null,
 	calle varchar(50) not null,
 	altura varchar(5) not null,
-	nro_depto varchar(5)  null,
-	nro_planta varchar(20) null,
 	nro_localidad smallint not null,
-	dni varchar(30) not null,
-	cod_dni varchar(20) not null,
+	cuit varchar(50) not null,
+	observaciones varchar (300) null,
 
 
-	constraint PK__Propiedades primary key (cod_propiedad),
-	constraint FK__Propiedades__Plantas foreign key (nro_planta) references Plantas,
+	constraint PK__Propiedades primary key (nro_propiedad),
 	constraint FK__Propiedades__Localidades foreign key (nro_localidad) references Localidades,
-	constraint FK__Propiedades__Dueños foreign key (dni, cod_dni) references Dueños
-
+	constraint FK__Propiedades__Dueños foreign key (cuit) references Dueños
 
 )
 go
@@ -121,33 +97,32 @@ go
 
 create table ServiciosEmpresas_Propiedades
 (
-	cod_propiedad varchar(40) not null,
+	nro_propiedad int not null, 
 	nro_empresa smallint not null,	
 	cod_servicio varchar(15) not null,
 	fecha_alta date null,
 	fecha_fin date null,
 	nro_cuenta smallint not null,
 
-	constraint PK__ServiciosEmpresas_Propiedades primary key(cod_propiedad, nro_empresa, cod_servicio),
-	constraint FK__ServiciosEmpresas_Propiedades__Propiedades foreign key (cod_propiedad) references Propiedades,
+	constraint PK__ServiciosEmpresas_Propiedades primary key(nro_propiedad, nro_empresa, cod_servicio),
+	constraint FK__ServiciosEmpresas_Propiedades__Propiedades foreign key (nro_propiedad) references Propiedades,
 	constraint FK__ServiciosEmpresas_Propiedades__Servicios_Empresas foreign key (nro_empresa, cod_servicio) references Servicios_Empresas
 )
 go
 
 create table Facturas
 (
-	cod_factura varchar (50) not null,
-	cod_propiedad varchar(40) not null,
+	nro_factura bigint not null identity,
+	codBarra varchar(40) null,
+	nro_propiedad int not null, 
 	nro_empresa smallint not null,	
 	cod_servicio varchar(15) not null,
 	importe decimal (10,2) not null,
 	fecha_venc date not null, 
-	pago varchar(2) not null default 'n',
+	pago bit not null default 0,
 
-	constraint PK__Facturas primary key (cod_factura),
-	constraint FK__Facturas__Servicios_Empresas foreign key (cod_propiedad, nro_empresa, cod_servicio) references ServiciosEmpresas_Propiedades,
-	
-	constraint CK__Propiedades_Pago check (pago  in ('s', 'n'))
+	constraint PK__Facturas primary key (nro_factura),
+	constraint FK__Facturas__Servicios_Empresas foreign key (nro_propiedad, nro_empresa, cod_servicio) references ServiciosEmpresas_Propiedades,
 )
 go
 
@@ -164,29 +139,27 @@ values ('AR', 'CBA', 'Rio Tercero', 1),
  ('AR', 'CBA', 'Cordoba Capital', 2)
  go
 
-insert into Tipos_DNI (cod_dni, desc_tipo_dni)
-values ('DNI' , 'Documento Nacional de Identidad')
-go
-
-insert into Dueños (dni, cod_dni, nombre, apellido, fecha_nac)
+insert into Dueños (cuit, nombre, apellido, fecha_nac)
 values
-('24585150', 'DNI', 'Silvia', 'Dellamaggiore', '1976-02-03'),
-('000', 'DNI', 'Celia', 'Garetto', '1940-06-21')
+('24585150', 'Silvia', 'Dellamaggiore', '1976-02-03'),
+('0000000', 'Celia', 'Garetto', '1940-06-21')
 go
 
-insert into Plantas (nro_planta, nom_planta)
-values (1, 'PB')
+select * from Localidades
+
+insert into Propiedades (nombre, calle, altura, nro_localidad, cuit, observaciones)
+values ('Dpto. Fragueiro', 'Mariano Fragueiro', '343', 2, '24585150', 'Departamento Planta Baja 4 en Mariano Fragueiro')
 go
 
-insert into Propiedades (cod_propiedad, nombre, calle, altura, nro_depto, nro_planta, nro_localidad, dni, cod_dni)
-values ('PROP1', 'Depto. Fragueiro', 'Mariano Fragueiro', '343', '4', 1, 2, '000', 'DNI')
+insert into Propiedades (nombre, calle, altura, nro_localidad, cuit, observaciones)
+values ('Casa Abuela', 'Leopoldo Lugones', '1255', 1, '24585150', 'Casa Abuela')
 go
 
-insert into Propiedades (cod_propiedad, nombre, calle, altura, nro_localidad, dni, cod_dni)
-values ('PROP2', 'Casa Abuela', 'Leopoldo Lugones', '1255', 1, '24585150', 'DNI'),
-('PROP3', 'Casa Rio 3', 'Leopoldo Lugones', '952', 2, '24585150', 'DNI')
+insert into Propiedades (nombre, calle, altura, nro_localidad, cuit, observaciones)
+values ('Casa', 'Leopoldo Lugones', '952', 1, '24585150', 'Casa Nuestra')
 go
 
+-- EPEC, Ecogas, Cooperativa RioTel, Banco Roela, Fibertel
 
 insert into Empresas (nro_empresa, nom_empresa)
 values (1, 'EPEC'),
@@ -198,29 +171,76 @@ go
 
 insert into Servicios (cod_servicio, nom_servicio)
 values ('LYA', 'Luz y Agua'),
-('GA', 'Gas'),
-('EX', 'Expensas'),
+('GAS', 'Gas'),
+('EXP', 'Expensas'),
 ('IT', 'Internet y Telefonia')
 go
 
 insert into Servicios_Empresas (nro_empresa, cod_servicio)
 values (1, 'LYA'),
-(2, 'GA'),
+(2, 'GAS'),
 (3, 'LYA'),
 (3,'IT'),
-(4, 'EX'),
+(4, 'EXP'),
 (5,'IT')
 go
 
+select * from ServiciosEmpresas_Propiedades
+select * from Propiedades
+select * from Empresas
 
-insert into ServiciosEmpresas_Propiedades (cod_propiedad, nro_empresa, cod_servicio, fecha_alta, fecha_fin, nro_cuenta)
-values ('PROP3', 3, 'LYA', null, null, 1),
-('PROP3', 3, 'IT', null, null, 2),
-('PROP3', 2, 'GA', null, null, 1)
 
-insert into Facturas (cod_factura, nro_empresa, cod_servicio, importe, fecha_venc, cod_propiedad, pago)
-values ('1', 3, 'LYA', 135388.29, '2025-04-07','PROP3' , 'n' )
+insert into ServiciosEmpresas_Propiedades (nro_propiedad, nro_empresa, cod_servicio, fecha_alta, fecha_fin, nro_cuenta)
+values (3, 3, 'LYA', null, null, 0),
+(3, 3, 'IT', null, null, 0),
+(3, 2, 'GAS', null, null, 0)
+
+insert into ServiciosEmpresas_Propiedades (nro_propiedad, nro_empresa, cod_servicio, fecha_alta, fecha_fin, nro_cuenta)
+values (2, 3, 'LYA', null, null, 0),
+(2, 2, 'GAS', null, null, 0)
+
+insert into ServiciosEmpresas_Propiedades (nro_propiedad, nro_empresa, cod_servicio, fecha_alta, fecha_fin, nro_cuenta)
+values (1, 1, 'LYA', null, null, 0),
+(1, 5, 'IT', null, null, 0),
+(1, 2, 'GAS', null, null, 0),
+(1, 4, 'EXP', null, null, 0)
+
+
+
+select * from Facturas
+select * from ServiciosEmpresas_Propiedades
+
+-- casa
+insert into Facturas (nro_propiedad, nro_empresa, cod_servicio, importe, fecha_venc)
+values (3, 3, 'LYA', 118194.89, '2025-08-11')
 go
+
+insert into Facturas (nro_propiedad, nro_empresa, cod_servicio, importe, fecha_venc)
+values (3, 2, 'GAS', 98708.07, '2025-08-11')
+go
+
+-- abuela
+insert into Facturas (nro_propiedad, nro_empresa, cod_servicio, importe, fecha_venc)
+values (2, 3, 'LYA', 32267.10, '2025-08-12')
+go
+
+insert into Facturas (nro_propiedad, nro_empresa, cod_servicio, importe, fecha_venc)
+values (2, 2, 'GAS', 19939.21, '2025-08-11')
+go
+
+-- depto
+insert into Facturas (nro_propiedad, nro_empresa, cod_servicio, importe, fecha_venc)
+values (1, 1, 'LYA', 13614, '2025-08-06')
+go
+
+insert into Facturas (nro_propiedad, nro_empresa, cod_servicio, importe, fecha_venc)
+values (1, 2, 'GAS', 8412.49, '2025-08-07')
+go
+
+insert into Facturas (nro_propiedad, nro_empresa, cod_servicio, importe, fecha_venc)
+values (1, 4, 'EXP', 76898.55, '2025-08-11')
+go
+
 
 select * from Facturas
 
@@ -230,7 +250,7 @@ CREATE or alter PROCEDURE ObtenerFuturosVencimientos
 AS
 BEGIN
     SELECT 
-        f.cod_factura,
+        f.nro_factura,
         f.importe,
         f.fecha_venc,
         p.nombre AS nombre_propiedad,
@@ -239,16 +259,18 @@ BEGIN
         s.nom_servicio,
         e.nom_empresa
     FROM Facturas f
-    JOIN Propiedades p ON f.cod_propiedad = p.cod_propiedad
+    JOIN Propiedades p ON f.nro_propiedad = p.nro_propiedad
     JOIN Servicios s ON f.cod_servicio = s.cod_servicio
     JOIN Empresas e ON f.nro_empresa = e.nro_empresa
     WHERE 
         f.fecha_venc >= CAST(GETDATE() AS DATE)  -- Vencimientos a partir de hoy
-        AND f.pago = 'n'                         -- No pagadas
+        AND f.pago = 0                        -- No pagadas
     ORDER BY 
-        f.fecha_venc ASC;                        -- Ordenadas por fecha de vencimiento
+        p.nro_propiedad;                        -- Ordenadas por fecha de vencimiento
 END;
 GO
+
+select * 
 
 
 exec ObtenerFuturosVencimientos

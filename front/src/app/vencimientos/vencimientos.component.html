@@ -1,0 +1,31 @@
+<h2>Futuros Vencimientos</h2>
+<table mat-table [dataSource]="vencimientos" class="mat-elevation-z8">
+  <ng-container matColumnDef="nombre_propiedad">
+    <th mat-header-cell *matHeaderCellDef>Propiedad</th>
+    <td mat-cell *matCellDef="let vencimiento"> <p> {{ vencimiento.nombre_propiedad }} </p></td>
+  </ng-container>
+  <ng-container matColumnDef="nom_servicio">
+    <th mat-header-cell *matHeaderCellDef>Servicio</th>
+    <td mat-cell *matCellDef="let vencimiento">{{ vencimiento.nom_servicio }}</td>
+  </ng-container>
+  <ng-container matColumnDef="nom_empresa">
+    <th mat-header-cell *matHeaderCellDef>Empresa</th>
+    <td mat-cell *matCellDef="let vencimiento">{{ vencimiento.nom_empresa }}</td>
+  </ng-container>
+  <ng-container matColumnDef="importe">
+    <th mat-header-cell *matHeaderCellDef>Importe</th>
+    <td mat-cell *matCellDef="let vencimiento">${{ vencimiento.importe }}</td>
+  </ng-container>
+  <ng-container matColumnDef="fecha_venc">
+    <th mat-header-cell *matHeaderCellDef>Vencimiento</th>
+    <td mat-cell *matCellDef="let vencimiento">{{ vencimiento.fecha_venc | date }}</td>
+  </ng-container>
+  <ng-container matColumnDef="acciones">
+    <th mat-header-cell *matHeaderCellDef>Acciones</th>
+    <td mat-cell *matCellDef="let vencimiento">
+      <button mat-raised-button color="primary" (click)="pagarFactura(vencimiento.cod_factura)">Pagar</button>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>

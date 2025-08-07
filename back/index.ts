@@ -1,13 +1,15 @@
-const express = require('express');
-const sequelize = require('./config/db');
-const facturaRoutes = require('./routes/facturaRoutes');
-const cors = require('cors'); // Agregamos cors
-
+import express from 'express';
+import sequelize from './config/db';
+import facturaRoutes from './routes/facturaRoutes';
+import cors from 'cors';
+import { FacturaRepository } from "./repositories/facturaRepository";
+console.log("FacturaRepository en index:", FacturaRepository);
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:4200'
-})); // Habilitamos cors para nuestro front
+  origin: 'http://localhost:4200',
+}));
+
 app.use(express.json());
 app.use('/api', facturaRoutes);
 

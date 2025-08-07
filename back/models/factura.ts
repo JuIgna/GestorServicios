@@ -1,13 +1,18 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+import { DataTypes } from "sequelize";
+import sequelize from '../config/db';
 
-const Factura = sequelize.define('Factura', {
-  cod_factura: {
-    type: DataTypes.STRING(50),
-    primaryKey: true
+export const Factura = sequelize.define('Factura', {
+  nro_factura: {
+    type: DataTypes.BIGINT,
+    primaryKey: true,
+    autoIncrement: true
   },
-  cod_propiedad: {
+  codBarra: {
     type: DataTypes.STRING(40),
+    allowNull: true
+  },
+  nro_propiedad: {
+    type: DataTypes.INTEGER,
     allowNull: false
   },
   nro_empresa: {
@@ -27,9 +32,9 @@ const Factura = sequelize.define('Factura', {
     allowNull: false
   },
   pago: {
-    type: DataTypes.STRING(2),
+    type: DataTypes.BOOLEAN,
     allowNull: false,
-    defaultValue: 'n'
+    defaultValue: 0
   }
 }, {
   tableName: 'Facturas',

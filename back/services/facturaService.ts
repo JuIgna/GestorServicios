@@ -2,8 +2,6 @@ import { vencimientos } from "../interfaces/facturaInterface";
 import { FacturaRepository } from "../repositories/facturaRepository";
 import sequelize from "../config/db";
 
-console.log("FacturaRepository:", FacturaRepository); // Debería mostrar la clase
-
 export class FacturaService {
         static async getVencimientos (): Promise <vencimientos[]> {
         try {
@@ -23,8 +21,8 @@ export class FacturaService {
             JOIN Servicios s ON f.cod_servicio = s.cod_servicio
             JOIN Empresas e ON f.nro_empresa = e.nro_empresa
             WHERE 
-            f.fecha_venc >= CAST(GETDATE() AS DATE)  -- Vencimientos a partir de hoy
-            AND f.pago = 0                        -- No pagadas
+            MONTH(f.fecha_venc) = MONTH(GETDATE()) AND YEAR(f.fecha_venc) = YEAR(GETDATE()) -- vencimientos del mes
+            -- AND f.pago = 0                        -- No pagadas
             ORDER BY 
             p.nro_propiedad                        -- Ordenadas por fecha de vencimiento
         `;

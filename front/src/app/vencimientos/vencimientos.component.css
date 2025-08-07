@@ -3,6 +3,21 @@ table {
     margin-bottom: 20px;
   }
 
-td p {
-  color: red;
+.totales-container {
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.totales-container h3 {
+  margin: 10px 0;
+}
+
+table.mat-table {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+th.mat-header-cell, td.mat-cell {
+  padding: 8px;
+  text-align: left;
 }

@@ -29,3 +29,22 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
+
+<!-- Sección de totales -->
+<div class="totales-container">
+  <h3>Totales por Propiedad</h3>
+  <table mat-table [dataSource]="totalesPorPropiedad" class="mat-elevation-z8">
+    <ng-container matColumnDef="nombre_propiedad">
+      <th mat-header-cell *matHeaderCellDef>Propiedad</th>
+      <td mat-cell *matCellDef="let total">{{ total.nombre_propiedad }}</td>
+    </ng-container>
+    <ng-container matColumnDef="total">
+      <th mat-header-cell *matHeaderCellDef>Total</th>
+      <td mat-cell *matCellDef="let total">${{ total.total | number: '1.2-2' }}</td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="['nombre_propiedad', 'total']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['nombre_propiedad', 'total'];"></tr>
+  </table>
+
+  <h3>Total General: ${{ totalGeneral | number: '1.2-2' }}</h3>
+</div>

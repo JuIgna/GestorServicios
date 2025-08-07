@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FacturaService } from '../services/factura.service';
-import { vencimientos } from 'interfaces/facturaInterface';
+import { vencimientos, totalPorPropiedad } from 'interfaces/facturaInterface';
 
 @Component({
   selector: 'app-vencimientos',
@@ -10,6 +10,8 @@ import { vencimientos } from 'interfaces/facturaInterface';
 export class VencimientosComponent implements OnInit {
   displayedColumns: string[] = ['nombre_propiedad', 'nom_servicio', 'nom_empresa', 'importe', 'fecha_venc', 'acciones'];
   vencimientos: vencimientos[] = [];
+  totalesPorPropiedad: totalPorPropiedad [] = [];
+  totalGeneral: number = 0;
 
   constructor(private facturaService: FacturaService) {}
 
@@ -19,10 +21,27 @@ export class VencimientosComponent implements OnInit {
 
   cargarVencimientos() {
     this.facturaService.getVencimientos().subscribe(data => {
-      console.log (data)
       this.vencimientos = data[0];
-      console.log(this.vencimientos);
+      this.calcularTotales();
     });
+  }
+
+  calcularTotales() {
+    // Calcular totales por propiedad
+    const totalesMap = this.vencimientos.reduce((acc, vencimiento) => {
+      const prop = vencimiento.nombre_propiedad;
+      acc[prop] = (acc[prop] || 0) + vencimiento.importe;
+      return acc;
+    }, {} as { [key: string]: number });
+
+    // Convertir el mapa a un array de TotalPorPropiedad
+    this.totalesPorPropiedad = Object.keys(totalesMap).map((nombre_propiedad) => ({
+      nombre_propiedad,
+      total: totalesMap[nombre_propiedad]
+    }));
+
+    // Calcular el total general
+    this.totalGeneral = this.vencimientos.reduce((acc, vencimiento) => acc + vencimiento.importe, 0);
   }
 
   pagarFactura(cod_factura: string) {

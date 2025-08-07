@@ -7,3 +7,8 @@ export interface vencimientos {
     nom_servicio: string,
     nom_empresa: string
 }
+
+export interface totalPorPropiedad {
+    nombre_propiedad: string,
+    total: number
+}
